@@ -1,19 +1,22 @@
 <template>
     <tr> <input v-model="productCopy.productName" :disabled="!edit">  {{ supp }}
-        <button v-if="edit" @click="SnimiIzmenu(productCopy.productId)">Snimi izmene</button>
-        <button v-if="!edit" @click="edit=true">Izmeni</button>
-        <button @click="ProductDelete(productCopy.productId)">Obrisi</button></tr>
+        <change-product v-if="edit" :product="product" :categories="categories" :suppliers="suppliers"></change-product>
+        <button v-if="!edit" @click="edit=true">Change</button>
+        <button @click="ProductDelete(productCopy.productId)">Delete</button></tr>
 </template>
 <script >
-import axios from 'axios'
+import ChangeProduct from './ChangeProduct.vue'
+import {bus} from '../main'
 export default {
     name:'ProductRow',
     props:{
-        product:Object
+        product:Object,
+        categories: Array,
+        suppliers: Array,
     },
-    emits:[
-        'productDeleteEvent'
-    ],
+    components:{
+        ChangeProduct
+    },
     data(){
         return{
             supp:"",
@@ -22,29 +25,8 @@ export default {
         }
     },
     methods:{
-        SnimiIzmenu(id){
-            axios
-            .put(`http://94.156.189.137:8000/api/Products/${id}`,this.productCopy)
-            .then(response=>{
-                console.log(response)
-                this.edit=false
-            })
-            .catch(err=>{
-                console.log(err)
-                // alert(`Greska:${err}`)
-            })
-        },
         ProductDelete(id){
-            axios
-            .delete(`http://94.156.189.137:8000/api/Products/${id}`)
-            .then(response=>{
-                console.log(response)
-                this.$emit('productDeleteEvent',null)
-            })
-            .catch(err=>{
-                console.log(err)
-                // alert(`Greska:${err}`)
-            })
+            bus.emit("delete-product", id)
         },
     },
     mounted(){
