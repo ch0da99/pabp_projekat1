@@ -45,6 +45,7 @@ export default {
 
 <style scoped>
 .changeProduct{
-    border: 1px solid yellow;
+    border: 3px solid yellowgreen;
+    padding: 5px;
 }
 </style>

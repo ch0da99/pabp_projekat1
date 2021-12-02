@@ -1,8 +1,16 @@
 <template>
-  Kategorija: <select name="" id="" @change="GetProductsOfCategory(categories.filter(c => c.categoryId == selectedCategory)[0].categoryId)" v-model="selectedCategory">
-    <option v-for="c in categories" :key="c.categoryId" :value="c.categoryId">{{ c.categoryName }}</option>
-  </select>
-  <ProductsTable :productsProp="compProducts" :categories="categories" :suppliers="suppliers" />
+  <div>
+    Category: <select name="" id="" @change="GetProductsOfCategory(categories.filter(c => c.categoryId == selectedCategoryId)[0].categoryId)" v-model="selectedCategoryId">
+      <option v-for="c in categories" :key="c.categoryId" :value="c.categoryId">{{ c.categoryName }}</option>
+    </select><br>
+    Filter supplier: <select name="" id="" @change="GetProductsOfCategory(selectedCategoryId)" v-model="selectedSupplierId">
+      <option value="">----No filter----</option>
+      <option v-for="s in suppliers" :key="s.supplierId" :value="s.supplierId">{{ s.companyName }}</option>
+    </select><br>
+    Search unit price: <input type="number" v-model="searchUnitPrice" @change="GetProductsOfCategory(selectedCategoryId)"> 
+    <input type="checkbox" v-model="searchUnitPriceSwitch" @change="GetProductsOfCategory(selectedCategoryId)">
+    <ProductsTable :productsProp="compProducts" :categories="categories" :suppliers="suppliers" />
+  </div>
 </template>
 
 <script>
@@ -19,7 +27,10 @@ export default {
       categories:[],
       suppliers:[],
       products:[],
-      selectedCategory:"start value"
+      selectedCategoryId:"",
+      selectedSupplierId:"",
+      searchUnitPrice:0.0,
+      searchUnitPriceSwitch:false,
     }
   },
   methods:{
@@ -51,6 +62,12 @@ export default {
       .then(response => {
         this.products = []
         this.products = response.data.filter(data => data.categoryId == id)
+        if(this.selectedSupplierId != ""){
+          this.products = this.products.filter(p => p.supplierId == this.selectedSupplierId)
+        }
+        if(this.searchUnitPriceSwitch){
+          this.products = this.products.filter(p => p.unitPrice <= this.searchUnitPrice)
+        }
       })
       .catch(err => {
         console.log(err)
@@ -61,8 +78,8 @@ export default {
     compProducts(){
       return this.products
     },
-    compSelectedCategory(){
-      return this.selectedCategory
+    compSelectedCategoryId(){
+      return this.selectedCategoryId
     }
   },
   mounted(){
@@ -98,7 +115,7 @@ export default {
       .post(`http://94.156.189.137:8000/api/Products`,product)
       .then(response=>{
           console.log(response)
-          if(product.categoryId == this.compSelectedCategory){
+          if(product.categoryId == this.compSelectedCategoryId){
             this.GetProductsOfCategory(product.categoryId)
           }
           alert('Product added successfuly!')
@@ -119,5 +136,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+body{
+    text-align: center;
 }
 </style>

@@ -1,8 +1,8 @@
 <template>
-    <tr> <input v-model="productCopy.productName" :disabled="!edit">  {{ supp }}
+    <tr> <input v-model="productCopy.productName" disabled>
         <change-product v-if="edit" :product="product" :categories="categories" :suppliers="suppliers"></change-product>
-        <button v-if="!edit" @click="edit=true">Change</button>
-        <button @click="ProductDelete(productCopy.productId)">Delete</button></tr>
+        <button @click="edit=!edit">Change</button>
+        <button @click="ProductDelete(product.productId)">Delete</button></tr>
 </template>
 <script >
 import ChangeProduct from './ChangeProduct.vue'
@@ -31,6 +31,11 @@ export default {
     },
     mounted(){
         this.productCopy=this.product
+    },
+    created(){
+        bus.on('save-changes', () => {
+            this.edit = false;
+        })
     }
 }
 </script>

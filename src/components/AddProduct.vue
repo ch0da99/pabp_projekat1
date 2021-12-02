@@ -9,12 +9,12 @@
             <option v-for="c in suppliers" :key="c.supplierId" :value="c.supplierId">{{ c.companyName }}</option>
         </select><br>
         Quantity per unit: <input type="text" v-model="newProduct.quantityPerUnit"><br>
-        Unit price: <input type="number" v-model="newProduct.unitPrice"><br>
-        Units in stock: <input type="number" v-model="newProduct.unitsInStock"><br>
-        Units on order: <input type="number" v-model="newProduct.unitsOnOrder"><br>
-        Reorder level: <input type="number" v-model="newProduct.reorderLevel"><br>
+        Unit price: <input type="number" v-model="newProduct.unitPrice" min="1" @input="unitPriceCheck()"><br>
+        Units in stock: <input type="number" v-model="newProduct.unitsInStock" min="0" @input="unitsInStockCheck()"><br>
+        Units on order: <input type="number" v-model="newProduct.unitsOnOrder" min="0" @input="unitsOnOrderCheck()"><br>
+        Reorder level: <input type="number" v-model="newProduct.reorderLevel" min="1" @input="reorderLevelCheck()"><br>
         Discontinued: <input type="checkbox" v-model="newProduct.discontinued">
-        <br><button @click="AddProduct()">Add</button>
+        <br><button @click="addProduct()">Add</button>
     </div>
 </template>
 
@@ -29,13 +29,39 @@ export default {
   },
   data(){
     return{
-      newProduct:{},
+      newProduct:{
+        unitPrice:1,
+        unitsInStock:0,
+        unitsOnOrder:0,
+        reorderLevel:1,
+      },
     }
   },
   methods:{
-    AddProduct(){
+    addProduct(){
       bus.emit('add-product', this.newProduct)
       this.newProduct = {}
+    },
+    unitPriceCheck(){
+      if(this.newProduct.unitPrice < 1){
+        this.newProduct.unitPrice = 1;
+      }
+    },
+    unitsInStockCheck(){
+      console.log(isNaN(this.newProduct.unitsInStock))
+      if(this.newProduct.unitsInStock < 0){
+        this.newProduct.unitsInStock = 0;
+      }
+    },
+    unitsOnOrderCheck(){
+      if(this.newProduct.unitsOnOrder < 0){
+        this.newProduct.unitsOnOrder = 0;
+      }
+    },
+    reorderLevelCheck(){
+      if(this.newProduct.reorderLevel < 1){
+        this.newProduct.reorderLevel = 1;
+      }
     },
   },
 }
