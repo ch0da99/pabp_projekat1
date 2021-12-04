@@ -1,13 +1,10 @@
 <template>
-    <table>
-        <ProductRow v-for="p in productsProp" :key="p.productId"
-         :product="p" :categories="categories" :suppliers="suppliers"/>
-         <!-- <select name="" id="">
-             <option v-for="p in PageNumber" :key="p" :value="p">{{p+1}}</option>
-         </select> -->
+    <table >
+        <ProductRow v-for="(p,i) in productsProp" :key="p.productId"
+         :product="p" :categories="categories" :suppliers="suppliers" :index="i"/>
          <add-product v-if="addProductSwitch" :categories="categories" :suppliers="suppliers" class="noviProizvod"></add-product>
-         <button @click="addProductSwitch=!addProductSwitch">Add new product</button>
     </table>
+    <button id="btnAddNewProduct" @click="addProductSwitch=!addProductSwitch">Add new product</button>
 </template>
 
 <script>
@@ -40,6 +37,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+table{
+  margin: 20px 0px;
+  width: 100%;
+}
 .noviProizvod{
   border: 1px solid limegreen;
   padding-bottom: 3px;
@@ -57,5 +58,11 @@ li {
 }
 a {
   color: #42b983;
+}
+#btnAddNewProduct{
+  color: white;
+  background-color: #008bad;
+  width: 150px;
+  height: 30px;
 }
 </style>

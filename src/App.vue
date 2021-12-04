@@ -9,7 +9,7 @@
     </select><br>
     Search unit price: <input type="number" v-model="searchUnitPrice" @change="GetProductsOfCategory(selectedCategoryId)"> 
     <input type="checkbox" v-model="searchUnitPriceSwitch" @change="GetProductsOfCategory(selectedCategoryId)">
-    <ProductsTable :productsProp="compProducts" :categories="categories" :suppliers="suppliers" />
+    <ProductsTable :productsProp="compProducts" :categories="categories" :suppliers="suppliers"/>
   </div>
 </template>
 
@@ -80,7 +80,7 @@ export default {
     },
     compSelectedCategoryId(){
       return this.selectedCategoryId
-    }
+    },
   },
   mounted(){
     this.GetAllCategories()
@@ -133,7 +133,7 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  /* text-align: center; */
   color: #2c3e50;
   margin-top: 60px;
 }

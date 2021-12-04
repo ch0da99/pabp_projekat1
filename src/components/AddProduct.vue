@@ -1,20 +1,20 @@
 <template>
     <div class="noviProizvod">
         <h4>Add new product section:</h4><br><br>
-        Choose product category: <select name="" id="" v-model="newProduct.categoryId">
-            <option v-for="c in categories" :key="c.categoryId" :value="c.categoryId">{{ c.categoryName }}</option>
-        </select><br>
-        Product name: <input type="text" v-model="newProduct.productName"><br>
-        Choose supplier: <select name="" id="" v-model="newProduct.supplierId">
-            <option v-for="c in suppliers" :key="c.supplierId" :value="c.supplierId">{{ c.companyName }}</option>
-        </select><br>
-        Quantity per unit: <input type="text" v-model="newProduct.quantityPerUnit"><br>
-        Unit price: <input type="number" v-model="newProduct.unitPrice" min="1" @input="unitPriceCheck()"><br>
-        Units in stock: <input type="number" v-model="newProduct.unitsInStock" min="0" @input="unitsInStockCheck()"><br>
-        Units on order: <input type="number" v-model="newProduct.unitsOnOrder" min="0" @input="unitsOnOrderCheck()"><br>
-        Reorder level: <input type="number" v-model="newProduct.reorderLevel" min="1" @input="reorderLevelCheck()"><br>
-        Discontinued: <input type="checkbox" v-model="newProduct.discontinued">
-        <br><button @click="addProduct()">Add</button>
+      Choose product category: <select name="" id="" v-model="newProduct.categoryId">
+          <option v-for="c in categories" :key="c.categoryId" :value="c.categoryId">{{ c.categoryName }}</option>
+      </select><br>
+      Product name: <input type="text" v-model="newProduct.productName"><br>
+      Choose supplier: <select name="" id="" v-model="newProduct.supplierId">
+          <option v-for="c in suppliers" :key="c.supplierId" :value="c.supplierId">{{ c.companyName }}</option>
+      </select><br>
+      Quantity per unit: <input type="text" v-model="newProduct.quantityPerUnit"><br>
+      Unit price: <input type="number" v-model="newProduct.unitPrice" min="1" @input="unitPriceCheck()"><br>
+      Units in stock: <input type="number" v-model="newProduct.unitsInStock" min="0" @input="unitsInStockCheck()"><br>
+      Units on order: <input type="number" v-model="newProduct.unitsOnOrder" min="0" @input="unitsOnOrderCheck()"><br>
+      Reorder level: <input type="number" v-model="newProduct.reorderLevel" min="0" @input="reorderLevelCheck()"><br>
+      Discontinued: <input type="checkbox" v-model="newProduct.discontinued">
+      <br><button @click="addProduct()">Add</button>
     </div>
 </template>
 
@@ -39,8 +39,12 @@ export default {
   },
   methods:{
     addProduct(){
-      bus.emit('add-product', this.newProduct)
-      this.newProduct = {}
+      if(isNaN(this.newProduct.categoryId) || isNaN(this.newProduct.supplierId) || this.newProduct.productName == ""){
+        alert("Niste uneli neophodne podatke! Molimo Vas unesite kategoriju, naziv i dobavljaca!")
+      }else{
+        bus.emit('add-product', this.newProduct)
+        this.newProduct = {}
+      }
     },
     unitPriceCheck(){
       if(this.newProduct.unitPrice < 1){
@@ -48,7 +52,7 @@ export default {
       }
     },
     unitsInStockCheck(){
-      console.log(isNaN(this.newProduct.unitsInStock))
+      console.log(isNaN(this.newProduct))
       if(this.newProduct.unitsInStock < 0){
         this.newProduct.unitsInStock = 0;
       }
@@ -59,8 +63,8 @@ export default {
       }
     },
     reorderLevelCheck(){
-      if(this.newProduct.reorderLevel < 1){
-        this.newProduct.reorderLevel = 1;
+      if(this.newProduct.reorderLevel < 0){
+        this.newProduct.reorderLevel = 0;
       }
     },
   },
@@ -72,6 +76,8 @@ export default {
 .noviProizvod{
   border: 1px solid limegreen;
   padding-bottom: 3px;
+  width: 450px;
+  margin: auto;
 }
 h3 {
   margin: 40px 0 0;

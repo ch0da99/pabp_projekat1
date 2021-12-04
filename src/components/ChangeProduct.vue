@@ -9,10 +9,10 @@
             <option v-for="c in suppliers" :key="c.supplierId" :value="c.supplierId">{{ c.companyName }}</option>
         </select><br>
         Quantity per unit: <input type="text" v-model="productCopy.quantityPerUnit"><br>
-        Unit price: <input type="number" v-model="productCopy.unitPrice"><br>
-        Units in stock: <input type="number" v-model="productCopy.unitsInStock"><br>
-        Units on order: <input type="number" v-model="productCopy.unitsOnOrder"><br>
-        Reorder level: <input type="number" v-model="productCopy.reorderLevel"><br>
+        Unit price: <input type="number" v-model="productCopy.unitPrice" min="1" @input="unitPriceCheck()"><br>
+        Units in stock: <input type="number" v-model="productCopy.unitsInStock" min="0" @input="unitsInStockCheck()"><br>
+        Units on order: <input type="number" v-model="productCopy.unitsOnOrder" min="0" @input="unitsOnOrderCheck()"><br>
+        Reorder level: <input type="number" v-model="productCopy.reorderLevel" min="0" @input="reorderLevelCheck()"><br>
         Discontinued: <input type="checkbox" v-model="productCopy.discontinued"><br>
         <button @click="SaveChanges(productCopy)">Save changes</button>
     </div>
@@ -33,8 +33,33 @@ export default {
     },
     methods:{
         SaveChanges(product){
-            bus.emit('save-changes', product)
+            if(isNaN(product.categoryId) || isNaN(product.supplierId) || product.productName == ""){
+                alert("Izbrisali ste neophodne podatke! Obavezno je uneti kategoriju, naziv i dobavljaca!")
+            }else{
+                bus.emit('save-changes', product)
+            }
+        },
+        unitPriceCheck(){
+        if(this.newProduct.unitPrice < 1){
+            this.newProduct.unitPrice = 1;
         }
+        },
+        unitsInStockCheck(){
+        console.log(isNaN(this.newProduct))
+        if(this.newProduct.unitsInStock < 0){
+            this.newProduct.unitsInStock = 0;
+        }
+        },
+        unitsOnOrderCheck(){
+        if(this.newProduct.unitsOnOrder < 0){
+            this.newProduct.unitsOnOrder = 0;
+        }
+        },
+        reorderLevelCheck(){
+        if(this.newProduct.reorderLevel < 0){
+            this.newProduct.reorderLevel = 0;
+        }
+        },
     },
     mounted(){
         this.productCopy = this.product
@@ -47,5 +72,7 @@ export default {
 .changeProduct{
     border: 3px solid yellowgreen;
     padding: 5px;
+    width: 450px;
+    margin: auto; 
 }
 </style>
