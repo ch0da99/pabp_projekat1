@@ -40,25 +40,24 @@ export default {
             }
         },
         unitPriceCheck(){
-        if(this.newProduct.unitPrice < 1){
-            this.newProduct.unitPrice = 1;
-        }
+        if(this.productCopy.unitPrice < 1){
+            this.productCopy.unitPrice = 1;
+            }
         },
         unitsInStockCheck(){
-        console.log(isNaN(this.newProduct))
-        if(this.newProduct.unitsInStock < 0){
-            this.newProduct.unitsInStock = 0;
-        }
+        if(this.productCopy.unitsInStock < 0){
+            this.productCopy.unitsInStock = 0;
+            }
         },
         unitsOnOrderCheck(){
-        if(this.newProduct.unitsOnOrder < 0){
-            this.newProduct.unitsOnOrder = 0;
-        }
+        if(this.productCopy.unitsOnOrder < 0){
+            this.productCopy.unitsOnOrder = 0;
+            }
         },
         reorderLevelCheck(){
-        if(this.newProduct.reorderLevel < 0){
-            this.newProduct.reorderLevel = 0;
-        }
+        if(this.productCopy.reorderLevel < 0){
+            this.productCopy.reorderLevel = 0;
+            }
         },
     },
     mounted(){
