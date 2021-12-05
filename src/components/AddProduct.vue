@@ -33,7 +33,7 @@ export default {
         unitPrice:1,
         unitsInStock:0,
         unitsOnOrder:0,
-        reorderLevel:1,
+        reorderLevel:0,
       },
     }
   },
